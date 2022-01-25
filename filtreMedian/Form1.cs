@@ -80,7 +80,8 @@ namespace filtreMedian
             {
                 for (int y = 1; y < (pbImage.Image.Height - 1); y++)
                 {
-                    byte[,] mat = new byte[3, 3] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+                    byte[,] mat = new byte[3, 3];
+                    
                     for (int k = -1; k < 2; k++)
                     {
                         for (int n = -1; n < 2; n++)
@@ -88,11 +89,15 @@ namespace filtreMedian
                             Color pix = pb.GetPixel(x + k, y + n);
                             byte r = pix.R;
                             mat[k + 1, n + 1] = r;
+                            
                         }
-
                     }
                     byte[] neufPix = new byte[9];
-                    neufPix[0] = mat[0, 0];
+                    // permet de passer d'un tableau 2d à 1d
+                    Buffer.BlockCopy(mat, 0, neufPix, 0, 9 * sizeof(byte));
+                    
+                    /* sinon faut tout tapper à la main tel un gitan
+                     * neufPix[0] = mat[0, 0];
                     neufPix[1] = mat[0, 1];
                     neufPix[2] = mat[0, 2];
 
@@ -102,8 +107,8 @@ namespace filtreMedian
 
                     neufPix[6] = mat[2, 0];
                     neufPix[7] = mat[2, 1];
-                    neufPix[8] = mat[2, 2];
-
+                    neufPix[8] = mat[2, 2];*/
+                    
                     neufPix = tri_a_bulle(neufPix);
 
                     Color newColor = Color.FromArgb(neufPix[4], neufPix[4], neufPix[4]);
